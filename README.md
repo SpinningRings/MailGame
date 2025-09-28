@@ -4,4 +4,4 @@ mouse wheel to zoom.
 
 MailWorldHeader.H contains all the libraries the project uses/is planned to use, as well as struct and function deffinitions.
 MailWorldDefinitions.c contains most of the variable declarations.
-BasicRaylibAnimation.c (name reflects what the project was meant to be when I started it) contains the functions definitions and the game loop.
+MailWorld.c contains the functions definitions and the game loop.
