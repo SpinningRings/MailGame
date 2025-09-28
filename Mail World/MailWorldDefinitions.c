@@ -23,8 +23,6 @@
     
     Brie.Position.x = TILE * 5;
     Brie.Position.y = TILE * 4;
-    //Brie.Position.x = TILE * 5;/*useful coordinates for starting in village 4*/
-    //Brie.Position.y = TILE * 5;
     Brie.Boundary.x = Brie.Position.x;
     Brie.Boundary.y = Brie.Position.y;
     Brie.Boundary.width = brieSprite[0].width - 4;
@@ -791,4 +789,5 @@
         Village4.response[x] = (char *){ "The trees are too dense \nto get through.\n" };
     }
     Village4.response[29] = (char *){ "I'm not swimming in the \nvillage's only water \nsource.\n" };
+
     
