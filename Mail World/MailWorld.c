@@ -17,10 +17,7 @@ static Texture2D *dialogue = NULL;
 static Image dialogueText;
 static Texture2D dialogueTexture;
 
-static struct map *place = &brieBedroom; //can be commented out for playtesting purposes, to change the starting locating
-
-//static struct map *place = &Village4;
-
+static struct map *place = &brieBedroom;
 
 #define BKGCLR      CLITERAL(Color){ 50, 68, 68, 255 }
 
@@ -28,12 +25,10 @@ int main(){
 
     InitWindow(screenWidth, screenHeight, "basic raylib animation");
     SetTargetFPS(50);
-    //srand(time(NULL));
     
     #include "mailworlddefinitions.c" 
     
     mailWorldStartup();
-    
     
     while (!WindowShouldClose()){
         
@@ -41,20 +36,6 @@ int main(){
         mailWorldUpdate();
         
         place = walking(place); //animates the character walking around the map, and returns a new map when the player reaches an exit
-        
-        //DrawRectangle( TILE * 2 , TILE * 6 , TILE , TILE * 14 , GREEN );
-        //DrawRectangle( TILE * 4 , TILE * 17 , TILE * 3 , TILE * 3 , GREEN );
-        //DrawRectangle( TILE * 7 , TILE * 18 , TILE * 2 , TILE , GREEN );
-        //DrawRectangle( TILE * 9 , TILE * 19 , TILE * 7 , TILE , GREEN);
-        //DrawRectangle( TILE * 16 , TILE * 17 , TILE * 2 , TILE * 2 , BROWN);
-        //DrawRectangle( TILE * 18 , TILE * 16 , TILE * 3, TILE , BROWN);
-        //DrawRectangle( TILE  * 4 , TILE * 13 , TILE , TILE , RED);
-        //DrawRectangle( TILE * 5 , TILE * 14 , TILE * 3 , TILE , RED);
-        //DrawRectangle( TILE * 17 , TILE * 14 , TILE * 3 , TILE , RED);
-        //DrawRectangle( TILE * 20 , TILE * 15 , TILE * 3 , TILE , RED);
-        //DrawRectangle( TILE * 12 , TILE * 12 , TILE , TILE , RED);
-        //DrawRectangle( TILE * 14 , TILE * 12 , TILE * 3 , TILE * 2 , RED);
-        //DrawRectangle( TILE * 13 , 0 , TILE * 2 , TILE * 9 , RED);
         
         Vector2 textPosition = (Vector2) { (Brie.Position.x - (TILE * 4.5f)) , (Brie.Position.y + (TILE * 2.5)) }; //where to display the dialogue box 
         
@@ -74,12 +55,6 @@ int main(){
             if (textOnScreen.height > dialogue->height){
                 textOnScreen.height = dialogue->height; //as above, but only if that will allow the dialogue box to contain the entire Texture2d
             }
-            
-/*            if ( textOnScreen.height + textOnScreen.y == dialogue->height && !IsKeyPressed(KEY_TAB) ){
-                DrawTexture(dialogueBox, (Brie.Position.x - (TILE * 5)) , (Brie.Position.y + (TILE * 2)) , WHITE);
-                DrawTextureRec( *dialogue, textOnScreen, textPosition, WHITE );
-            }
-*/            
             else if ( textOnScreen.y - 10 < ( dialogue->height - textOnScreen.height ) ){
                 DrawTexture(dialogueBox, (Brie.Position.x - (TILE * 5)) , (Brie.Position.y + (TILE * 2)) , WHITE);
                 DrawTextureRec( *dialogue, textOnScreen, textPosition, WHITE );
@@ -88,15 +63,7 @@ int main(){
                 dialogue = NULL;
                 textOnScreen.y = 0;
             }
-        }
-        
-        
-        
-        /*if(dialogue){
-            DrawTexture(dialogueBox, (Brie.Position.x - (TILE * 5)) , (Brie.Position.y + (TILE * 2)) , WHITE);
-            DrawText( dialogue , (Brie.Position.x - (TILE * 4.5f) + word) , (Brie.Position.y + (TILE * 2.5)) , 40 , BLACK );
-        }*/
-        
+        }        
         
         if(IsKeyPressed(KEY_A) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_D) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_LEFT)){
             dialogue = NULL;//removes text from screen when player moves
@@ -104,15 +71,11 @@ int main(){
         
         mailWorldDraw();
         
-
-        
         EndDrawing();
     }
     
-    
     mailWorldShutdown();
     
-
     CloseWindow();
     return 0;
 }
@@ -139,8 +102,6 @@ struct map * walking(struct map *maPtr){
             walkingSpeed /= 2;
         }
     }
-    
-    
     
     if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)){
         Brie.futureBoundary = Brie.Boundary;
@@ -188,9 +149,6 @@ struct map * walking(struct map *maPtr){
                 }
             }
         }
-    
-    
-    
         
     if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){
         Brie.futureBoundary = Brie.Boundary;
@@ -366,5 +324,6 @@ void mailWorldShutdown(){
     UnloadTexture(confoundingForest2.background);
     UnloadTexture(Village5.background);
     UnloadTexture(dialogueBox);
+
 
 }
