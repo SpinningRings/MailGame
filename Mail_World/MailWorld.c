@@ -139,199 +139,184 @@ int main(){
 }
 
 struct map * walking(struct map *maPtr){
+  frame++;
+  if (frame > 40){
+    frame = 1;
+  }
+  if (IsKeyPressed (KEY_SPACE)){
+    walkingSpeed *= 2;
+  }
     
-    frame++;
-    if (frame > 40){
-        frame = 1;
-    }
-    
-    if (IsKeyPressed (KEY_SPACE)){
-        walkingSpeed *= 2;
-    }
-    
-    if (IsKeyPressed (KEY_LEFT_SHIFT)){
-        if (walkingSpeed > 2){
-            walkingSpeed /= 2;
-        }
-    }
-    
-    
-  if (!dialogueOnScreen){  
-    if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W))){
-        movement(&Brie.Boundary.y , &Brie.futureBoundary.y , &Brie.Position.y , -1);
-        direction = 2;
-        
-            if (!(IsKeyDown(KEY_LEFT)) && !(IsKeyDown(KEY_RIGHT)) && !(IsKeyDown(KEY_A)) && !(IsKeyDown(KEY_D))){   
-                
-                walkingCycle(9);
-            }
-        }
-    
-    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)){
-        movement(&Brie.Boundary.y , &Brie.futureBoundary.y , &Brie.Position.y , 1);
-        direction = 0;
-            
-            if (!(IsKeyDown(KEY_LEFT)) && !(IsKeyDown(KEY_RIGHT)) && !(IsKeyDown(KEY_A)) && !(IsKeyDown(KEY_D))){   
-                walkingCycle(0);
-            }
-          }
-    
-    
-    
-        
-    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){
-        movement(&Brie.Boundary.x , &Brie.futureBoundary.x , &Brie.Position.x , -1);
-        direction = 1;
-        walkingCycle(3);
-    }
-        
-    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)){
-        movement(&Brie.Boundary.x , &Brie.futureBoundary.x , &Brie.Position.x , 1);
-        direction = 3;
-        walkingCycle(6);
+  if (IsKeyPressed (KEY_LEFT_SHIFT)){
+    if (walkingSpeed > 2){
+      walkingSpeed /= 2;
     }
   }
     
-    Exit = isExit(maPtr);
-    if (Exit != 0){
-        
-        Brie.Position = maPtr->entrance[Exit];
-        Brie.Boundary.x = maPtr->entrance[Exit].x;
-        Brie.Boundary.y = maPtr->entrance[Exit].y;
-        Brie.BriCam.target = maPtr->entrance[Exit];
-        
-        return(maPtr->maPtr[Exit]);
+    
+  if (!dialogueOnScreen){ 
+  
+    if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W))){
+      movement(&Brie.Boundary.y , &Brie.futureBoundary.y , &Brie.Position.y , -1);
+      direction = 2;
+      if (!(IsKeyDown(KEY_LEFT)) && !(IsKeyDown(KEY_RIGHT)) && !(IsKeyDown(KEY_A)) && !(IsKeyDown(KEY_D))){   
+        walkingCycle(9);
+      }
     }
     
-    else return (maPtr);     
+    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)){
+      movement(&Brie.Boundary.y , &Brie.futureBoundary.y , &Brie.Position.y , 1);
+      direction = 0;
+      if (!(IsKeyDown(KEY_LEFT)) && !(IsKeyDown(KEY_RIGHT)) && !(IsKeyDown(KEY_A)) && !(IsKeyDown(KEY_D))){   
+      walkingCycle(0);
+      }
+    }
+    
+    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){
+      movement(&Brie.Boundary.x , &Brie.futureBoundary.x , &Brie.Position.x , -1);
+      direction = 1;
+      walkingCycle(3);
+    }
+        
+    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)){
+      movement(&Brie.Boundary.x , &Brie.futureBoundary.x , &Brie.Position.x , 1);
+      direction = 3;
+      walkingCycle(6);
+    }
+  }
+    
+  Exit = isExit(maPtr);
+  if (Exit != 0){
+    Brie.Position = maPtr->entrance[Exit];
+    Brie.Boundary.x = maPtr->entrance[Exit].x;
+    Brie.Boundary.y = maPtr->entrance[Exit].y;
+    Brie.BriCam.target = maPtr->entrance[Exit];
+        
+    return(maPtr->maPtr[Exit]);
+  }
+  else return (maPtr);     
 }
 
 int brieFacing(void){
-
-    if (dialogueOnScreen || (!IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_UP) && !(IsKeyDown(KEY_W)) && !(IsKeyDown(KEY_S)) && !(IsKeyDown(KEY_A)) && !(IsKeyDown(KEY_D)))){
-        
-        if (direction == 0){
-            DrawTexture(Brie.brieTexture[0], Brie.Position.x, Brie.Position.y, WHITE);
-        }
-            
-        else if(direction == 1){
-            DrawTexture(Brie.brieTexture[3], Brie.Position.x, Brie.Position.y, WHITE);
-        }
-            
-        else if(direction == 2){
-            DrawTexture(Brie.brieTexture[9], Brie.Position.x, Brie.Position.y, WHITE);
-        }
-            
-        else if(direction == 3){
-            DrawTexture(Brie.brieTexture[6], Brie.Position.x, Brie.Position.y, WHITE);
-        }
+  if (dialogueOnScreen || (!IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_UP) && !(IsKeyDown(KEY_W)) && !(IsKeyDown(KEY_S)) && !(IsKeyDown(KEY_A)) && !(IsKeyDown(KEY_D)))){
+    if (direction == 0){
+      DrawTexture(Brie.brieTexture[0], Brie.Position.x, Brie.Position.y, WHITE);
     }
-    return(direction);
+    else if(direction == 1){
+      DrawTexture(Brie.brieTexture[3], Brie.Position.x, Brie.Position.y, WHITE);
+    }
+    else if(direction == 2){
+      DrawTexture(Brie.brieTexture[9], Brie.Position.x, Brie.Position.y, WHITE);
+    }
+    else if(direction == 3){
+      DrawTexture(Brie.brieTexture[6], Brie.Position.x, Brie.Position.y, WHITE);
+    }
+  }
+  return(direction);
 }
 
 int isObstacle(struct map *maPtr){
-    for (collision = 0; collision < maPtr->maxBounds; collision++){
-        if (CheckCollisionRecs(Brie.futureBoundary, maPtr->bounds[collision]) == true){
-        return 0;
-        }
+  for (collision = 0; collision < maPtr->maxBounds; collision++){
+    if (CheckCollisionRecs(Brie.futureBoundary, maPtr->bounds[collision]) == true){
+      return 0;
     }
-    return walkingSpeed;   
+  }
+  return walkingSpeed;   
 }
 
 size_t isExit(struct map *maPtr){
-    for (size_t door = 1; door < maPtr->maxExit; door++)
-        if (CheckCollisionRecs(Brie.futureBoundary, maPtr->Exit[door]) == true){
-            return (door);
-        }
-    return 0;
+  for (size_t door = 1; door < maPtr->maxExit; door++)
+    if (CheckCollisionRecs(Brie.futureBoundary, maPtr->Exit[door]) == true){
+      return (door);
+    }
+  return 0;
 }
 
 void mailWorldStartup(){
-    InitAudioDevice();
+  InitAudioDevice();
 }
 
-
 void pauseMenu(void){
-    EndMode2D();
-    DrawTexture( pauseScreen , 0 , 0 , WHITE );
-    menuOption = false;
-    DrawTexture( menuCursor.arrow , menuCursor.position.x , menuCursor.position.y , WHITE );
-    DrawText("Save Game" , TILE * 3 , TILE , 80 , MYRED);
-    DrawText("Load Game" , TILE * 3 , TILE * 2 , 80 , MYRED);
-    DrawText("Inventory" , TILE * 3 , TILE * 3 , 80 , MYRED);
-    DrawText("Resume Game" , TILE * 3 , TILE * 4 , 80 , MYRED);
+  EndMode2D();
+  DrawTexture( pauseScreen , 0 , 0 , WHITE );
+  menuOption = false;
+  DrawTexture( menuCursor.arrow , menuCursor.position.x , menuCursor.position.y , WHITE );
+  DrawText("Save Game" , TILE * 3 , TILE , 80 , MYRED);
+  DrawText("Load Game" , TILE * 3 , TILE * 2 , 80 , MYRED);
+  DrawText("Inventory" , TILE * 3 , TILE * 3 , 80 , MYRED);
+  DrawText("Resume Game" , TILE * 3 , TILE * 4 , 80 , MYRED);
     
-    if (IsKeyPressed(KEY_DOWN)){
-        menuCursor.position.y += TILE;
-        if (menuCursor.position.y > TILE * 4){
-            menuCursor.position.y = TILE;
-        }
+  if (IsKeyPressed(KEY_DOWN)){
+    menuCursor.position.y += TILE;
+    if (menuCursor.position.y > TILE * 4){
+      menuCursor.position.y = TILE;
     }
+  }
     
-    if (IsKeyPressed(KEY_UP)){
-        menuCursor.position.y -= TILE;
-        if (menuCursor.position.y < TILE){
-            menuCursor.position.y = TILE * 4;
-        }
+  if (IsKeyPressed(KEY_UP)){
+    menuCursor.position.y -= TILE;
+    if (menuCursor.position.y < TILE){
+      menuCursor.position.y = TILE * 4;
     }
+  }
     
-    if (IsKeyPressed(KEY_ENTER)){
-        menuOption = true;
+  if (IsKeyPressed(KEY_ENTER)){
+    menuOption = true;
+  }
+  
+  if (menuOption == true){
+    PlaySound(sound[openMenu]);
+    usleep(500000);
+      switch((int)menuCursor.position.y){
+        case TILE:
+          saveGame();
+          menuCursor.position.y = TILE;
+          menuOption = false;
+          break;
+        case TILE * 2:
+          loadGame();
+          pauseGame = false;
+          menuCursor.position.y = TILE;
+          menuOption = false;
+          break;
+        case TILE * 3:
+          break;
+        case TILE * 4:
+          menuCursor.position.y = TILE;
+          pauseGame = false;
+          menuOption = false;
+          break;
+        default:
+          break;
     }
-    
-    if (menuOption == true){
-        PlaySound(sound[openMenu]);
-        usleep(500000);
-        switch((int)menuCursor.position.y){
-            case TILE:
-                saveGame();
-                menuCursor.position.y = TILE;
-                menuOption = false;
-                break;
-            case TILE * 2:
-                loadGame();
-                pauseGame = false;
-                menuCursor.position.y = TILE;
-                menuOption = false;
-                break;
-            case TILE * 3:
-                break;
-            case TILE * 4:
-                menuCursor.position.y = TILE;
-                pauseGame = false;
-                menuOption = false;
-                break;
-            default:
-                break;
-        }
-    }
+  }
 }
 
 
 void saveGame(void){
-    if ((saveFile = fopen("saveFile.dat" , "wb+")) == NULL){
-        DrawText("Game could not be saved" , Brie.Position.x , Brie.Position.y , 40 , MYRED);
-        }
-    else{
-        gameState.Brie = Brie;
-        gameState.place = place;
-        gameState.direction = direction;
-        fwrite(&gameState , sizeof(gameState) , 1 , saveFile);
-        fclose(saveFile);
-    }
+  if ((saveFile = fopen("saveFile.dat" , "wb+")) == NULL){
+    DrawText("Game could not be saved" , Brie.Position.x , Brie.Position.y , 40 , MYRED);
+  }
+  else{
+    gameState.Brie = Brie;
+    gameState.place = place;
+    gameState.direction = direction;
+    fwrite(&gameState , sizeof(gameState) , 1 , saveFile);
+    fclose(saveFile);
+  }
 }
 
 void loadGame(void){
-    if ((saveFile = fopen("saveFile.dat" , "rb+")) == NULL){
-        DrawText("Game could not be loaded" , Brie.Position.x , Brie.Position.y , 40 , MYRED);
-    }                
-    else {
-        fread(&gameState , sizeof(gameState) , 1 , saveFile);
-        Brie = gameState.Brie;
-        place = gameState.place;
-        direction = gameState.direction;
-        fclose(saveFile);
-    }
+  if ((saveFile = fopen("saveFile.dat" , "rb+")) == NULL){
+    DrawText("Game could not be loaded" , Brie.Position.x , Brie.Position.y , 40 , MYRED);
+  }                
+  else {
+    fread(&gameState , sizeof(gameState) , 1 , saveFile);
+    Brie = gameState.Brie;
+    place = gameState.place;
+    direction = gameState.direction;
+    fclose(saveFile);
+  }
 }
 
 void inventory(){
@@ -339,34 +324,30 @@ void inventory(){
 }
 
 void isActionable(struct map *maPtr ){
-    
-    if (direction == 0){
-        Brie.futureBoundary.y += walkingSpeed;
+  if (direction == 0){
+    Brie.futureBoundary.y += walkingSpeed;
+  }
+  if (direction == 2){
+    Brie.futureBoundary.y -= walkingSpeed;
+  }
+  if (direction == 1){
+    Brie.futureBoundary.x -= walkingSpeed;
+  }
+  if (direction == 3){
+    Brie.futureBoundary.x += walkingSpeed;
+  }
+  for (collision = 0; collision < maPtr->maxBounds; collision++){
+    if (CheckCollisionRecs(Brie.futureBoundary, maPtr->bounds[collision]) == true){
+      if ( dialogue ){
+        UnloadTexture(dialogueTexture);
+      }
+      dialogueText = ImageText(maPtr->response[collision] , 40 , BLACK);
+      dialogueTexture = LoadTextureFromImage(dialogueText);
+      UnloadImage(dialogueText);
+      dialogue = &dialogueTexture;
+      dialogueOnScreen = true;
     }
-    
-    if (direction == 2){
-        Brie.futureBoundary.y -= walkingSpeed;
-    }
-    
-    if (direction == 1){
-        Brie.futureBoundary.x -= walkingSpeed;
-    }
-    
-    if (direction == 3){
-        Brie.futureBoundary.x += walkingSpeed;
-    }
-    for (collision = 0; collision < maPtr->maxBounds; collision++){
-        if (CheckCollisionRecs(Brie.futureBoundary, maPtr->bounds[collision]) == true){
-            if ( dialogue ){
-                UnloadTexture(dialogueTexture);
-            }
-            dialogueText = ImageText(maPtr->response[collision] , 40 , BLACK);
-            dialogueTexture = LoadTextureFromImage(dialogueText);
-            UnloadImage(dialogueText);
-            dialogue = &dialogueTexture;
-            dialogueOnScreen = true;
-        }
-    }
+  }
 }
 
 void walkingCycle(size_t base){
@@ -383,35 +364,35 @@ void walkingCycle(size_t base){
 }
 
 void movement(float * axis , float * futureAxis , float * positionAxis , int velocity){
-        Brie.futureBoundary = Brie.Boundary;
-        *futureAxis += (walkingSpeed * velocity);
-        speed = isObstacle(place);
-        *axis += (speed * velocity);
-        *positionAxis = *axis;
-        Brie.BriCam.target = Brie.Position;
+  Brie.futureBoundary = Brie.Boundary;
+  *futureAxis += (walkingSpeed * velocity);
+  speed = isObstacle(place);
+  *axis += (speed * velocity);
+  *positionAxis = *axis;
+  Brie.BriCam.target = Brie.Position;
 }
 
 void mailWorldShutdown(){
 
-    for (size_t x = 0 ; x < maxSounds ; x++){
-        UnloadSound(sound[x]);
-    }
-    CloseAudioDevice();
-    EndMode2D();
-    for (size_t x = 0 ; x < 12 ; x++){
-        UnloadTexture(Brie.brieTexture[x]);
-    }
-    UnloadTexture(brieBedroom.background);    
-    UnloadTexture(Village1.background);
-    UnloadTexture(confoundingForest.background);
-    UnloadTexture(Village2.background);
-    UnloadTexture(caverns1.background);
-    UnloadTexture(Village3.background);
-    UnloadTexture(caverns2.background);
-    UnloadTexture(Village4.background);
-    UnloadTexture(confoundingForest2.background);
-    UnloadTexture(Village5.background);
-    UnloadTexture(dialogueBox);
-    UnloadTexture(pauseScreen);
-    UnloadTexture(menuCursor.arrow);
+  for (size_t x = 0 ; x < maxSounds ; x++){
+    UnloadSound(sound[x]);
+  }
+  CloseAudioDevice();
+  EndMode2D();
+  for (size_t x = 0 ; x < 12 ; x++){
+    UnloadTexture(Brie.brieTexture[x]);
+  }
+  UnloadTexture(brieBedroom.background);    
+  UnloadTexture(Village1.background);
+  UnloadTexture(confoundingForest.background);
+  UnloadTexture(Village2.background);
+  UnloadTexture(caverns1.background);
+  UnloadTexture(Village3.background);
+  UnloadTexture(caverns2.background);
+  UnloadTexture(Village4.background);
+  UnloadTexture(confoundingForest2.background);
+  UnloadTexture(Village5.background);
+  UnloadTexture(dialogueBox);
+  UnloadTexture(pauseScreen);
+  UnloadTexture(menuCursor.arrow);
 }
