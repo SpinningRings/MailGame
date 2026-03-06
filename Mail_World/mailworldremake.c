@@ -392,16 +392,14 @@ void animateWalkingCycle(size_t base){
 
 
 void warpToNextMap(void){
-  
-
   for (size_t i = 0; i < places[currentPlace].numbers.maxExits; i++){
     if(CheckCollisionRecs(player.boundary, places[currentPlace].exits[i].exitTile)){
-      currentPlace = places[currentPlace].exits[i].nextMap;
-      player.position.x = places[currentPlace].exits[i].nextMapArivalposition.x;
-      player.position.y = places[currentPlace].exits[i].nextMapArivalposition.y;
+      player.position = places[currentPlace].exits[i].nextMapArivalposition;
       player.boundary.x = player.position.x;
       player.boundary.y = player.position.y;
       player.camera.target = player.position;
+      currentPlace = places[currentPlace].exits[i].nextMap;
+      return;
     }
   }
 }
