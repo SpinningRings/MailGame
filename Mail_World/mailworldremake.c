@@ -52,7 +52,7 @@ int main(){
       b = drawMailWorldText();
     }
     
-    DrawRectangle(places[brieBedroom].exits[0].nextMapArivalposition.x, places[brieBedroom].exits[0].nextMapArivalposition.y, TILE, TILE, MAROON);
+    DrawRectangle((int)places[brieBedroom].exits[0].nextMapArivalposition.x, (int)places[brieBedroom].exits[0].nextMapArivalposition.y, TILE, TILE, MAROON);
     if(checkForExit()){
     warpToNextMap();
   }
@@ -85,7 +85,7 @@ void mailWorldStartup(){
 void initializePlayer(void){
   player.position = tiledVector2((Vector2) { 5 , 4 });
   player.positionArrayIndex = (vector2size_t) { 5 , 4 };
-  player.boundary = (Rectangle) {player.position.x , player.position.y , playerSprite[0].width , playerSprite[0].height };
+  player.boundary = (Rectangle) {player.position.x , player.position.y , (float)playerSprite[0].width , (float)playerSprite[0].height };
   player.camera = (Camera2D) {player.position, player.position, 0.0f , 1.0f};  
 }
 
@@ -368,9 +368,9 @@ void controlPlayerCharacter(void){
 
 void adjustPlayerPosition(float * axis , float * futureAxis , float * positionAxis , int velocity){
   player.futureBoundary = player.boundary;
-  *futureAxis += (baseWalkingSpeed * velocity);
+  *futureAxis += (float)(baseWalkingSpeed * velocity);
   if (!checkForObstacle()){
-    *axis += (baseWalkingSpeed * velocity);
+    *axis += (float)(baseWalkingSpeed * velocity);
     *positionAxis = *axis;
     player.camera.target = player.position;
   }
@@ -379,14 +379,14 @@ void adjustPlayerPosition(float * axis , float * futureAxis , float * positionAx
 
 void animateWalkingCycle(size_t base){
   if (frame >= 10 && frame < 20){
-    DrawTexture(playerSprite[base + 1], player.position.x, player.position.y, WHITE);
+    DrawTexture(playerSprite[base + 1], (int)player.position.x, (int)player.position.y, WHITE);
   }
   else if (frame >= 30) {
     //PlaySound(sound[footstep]);
-    DrawTexture(playerSprite[base + 2], player.position.x, player.position.y, WHITE);
+    DrawTexture(playerSprite[base + 2], (int)player.position.x, (int)player.position.y, WHITE);
   }
   else {
-    DrawTexture(playerSprite[base], player.position.x, player.position.y, WHITE);
+    DrawTexture(playerSprite[base], (int)player.position.x, (int)player.position.y, WHITE);
   }
 }
 
@@ -508,7 +508,7 @@ book * drawMailWorldText(void){
   
   Vector2 dialogueBoxPosition = (Vector2){(player.position.x - (TILE * 5)) , (player.position.y + (TILE * 2))};
   
-  DrawTexture(dialogueBox, dialogueBoxPosition.x , dialogueBoxPosition.y , WHITE);
+  DrawTexture(dialogueBox, (int)dialogueBoxPosition.x , (int)dialogueBoxPosition.y , WHITE);
   
   Vector2 textPosition = (Vector2) { dialogueBoxPosition.x + 20,  dialogueBoxPosition.y + 20};
   
@@ -520,24 +520,24 @@ book * drawMailWorldText(void){
     textPosition.x = dialogueBoxPosition.x + 20;
     for (j = 0; b->pages[i][j] != '\0'; j++){
       if(b->pages[i][j] == '.'){
-        DrawTexture(punctuation[period], textPosition.x - PUNCT_OFFSET, textPosition.y, WHITE);
+        DrawTexture(punctuation[period], (int)(textPosition.x - PUNCT_OFFSET), (int)textPosition.y, WHITE);
       }else if(b->pages[i][j] == ','){
-        DrawTexture(punctuation[comma], textPosition.x - PUNCT_OFFSET, textPosition.y, WHITE);
+        DrawTexture(punctuation[comma], (int)(textPosition.x - PUNCT_OFFSET), (int)textPosition.y, WHITE);
       }else if(b->pages[i][j] == ':'){
-        DrawTexture(punctuation[colon], textPosition.x - PUNCT_OFFSET, textPosition.y, WHITE);
+        DrawTexture(punctuation[colon], (int)(textPosition.x - PUNCT_OFFSET), (int)textPosition.y, WHITE);
       }else if(b->pages[i][j] == ';'){
-        DrawTexture(punctuation[semicolon], textPosition.x - PUNCT_OFFSET, textPosition.y, WHITE);
+        DrawTexture(punctuation[semicolon], (int)(textPosition.x - PUNCT_OFFSET), (int)textPosition.y, WHITE);
       }else if(b->pages[i][j] == '?'){
-        DrawTexture(punctuation[question], textPosition.x - PUNCT_OFFSET, textPosition.y, WHITE);
+        DrawTexture(punctuation[question], (int)(textPosition.x - PUNCT_OFFSET), (int)textPosition.y, WHITE);
       }else if(b->pages[i][j] == '!'){
-        DrawTexture(punctuation[exclamation], textPosition.x - PUNCT_OFFSET, textPosition.y, WHITE);
+        DrawTexture(punctuation[exclamation], (int)(textPosition.x - PUNCT_OFFSET), (int)textPosition.y, WHITE);
       }else if(b->pages[i][j] == '\''){
-        DrawTexture(punctuation[apostrophe], textPosition.x - PUNCT_OFFSET, textPosition.y, WHITE);
+        DrawTexture(punctuation[apostrophe], (int)(textPosition.x - PUNCT_OFFSET), (int)textPosition.y, WHITE);
       }else if(b->pages[i][j] == ' '){
         textPosition.x += TEXT_TILE;
       }else if(isalpha(b->pages[i][j])){
-        char c = toupper(b->pages[i][j]);
-        DrawTexture(alphabet[c - 'A'], textPosition.x, textPosition.y, WHITE);
+        char c = (char)toupper(b->pages[i][j]);
+        DrawTexture(alphabet[c - 'A'], (int)textPosition.x, (int)textPosition.y, WHITE);
         textPosition.x += TEXT_TILE;
       }else{
         textPosition.x += TEXT_TILE;
@@ -584,20 +584,21 @@ bool directionKeyDown(void){
 }
 
 
-int getSafeIndex(float coordinate, size_t maxDimension) {
-    int index = (int)(coordinate / TILE);
-    if (index < 0) return 0;
-    if (index >= maxDimension) return maxDimension - 1;
-    return index;
+size_t getSafeIndex(float coordinate, size_t maxDimension) {
+  size_t index = (size_t)(coordinate / TILE);
+  if (index >= maxDimension){
+    return maxDimension - 1;
+  }
+  return index;
 }
 
 
 bool checkForObstacle(void){
   
-  int xLeft =  getSafeIndex(player.futureBoundary.x, places[currentPlace].numbers.xTiles);
-  int xRight =  getSafeIndex(player.futureBoundary.x + TILE, places[currentPlace].numbers.xTiles);
-  int yTop = getSafeIndex(player.futureBoundary.y, places[currentPlace].numbers.yTiles);
-  int yBottom = getSafeIndex(player.futureBoundary.y + TILE, places[currentPlace].numbers.yTiles);
+  size_t xLeft =  getSafeIndex(player.futureBoundary.x, places[currentPlace].numbers.xTiles);
+  size_t xRight =  getSafeIndex(player.futureBoundary.x + TILE, places[currentPlace].numbers.xTiles);
+  size_t yTop = getSafeIndex(player.futureBoundary.y, places[currentPlace].numbers.yTiles);
+  size_t yBottom = getSafeIndex(player.futureBoundary.y + TILE, places[currentPlace].numbers.yTiles);
   
   return((places[currentPlace].mapFeatures[yTop][xLeft].obstacle) ||
         (places[currentPlace].mapFeatures[yBottom][xRight].obstacle) || 
@@ -612,12 +613,12 @@ bool checkForObstacle(void){
 
 bool checkForActionable(void){
   
-  const int offset = 8;
+  const float offset = 8.0f;
   
-  int yTop = getSafeIndex(player.position.y - offset, places[currentPlace].numbers.yTiles);
-  int yBottom = getSafeIndex(player.position.y + TILE + offset, places[currentPlace].numbers.yTiles);
-  int xRight =  getSafeIndex(player.position.x + TILE + offset, places[currentPlace].numbers.xTiles);
-  int xLeft =  getSafeIndex(player.position.x - offset, places[currentPlace].numbers.xTiles);
+  size_t yTop = getSafeIndex(player.position.y - offset, places[currentPlace].numbers.yTiles);
+  size_t yBottom = getSafeIndex(player.position.y + TILE + offset, places[currentPlace].numbers.yTiles);
+  size_t xRight =  getSafeIndex(player.position.x + TILE + offset, places[currentPlace].numbers.xTiles);
+  size_t xLeft =  getSafeIndex(player.position.x - offset, places[currentPlace].numbers.xTiles);
   
   return((places[currentPlace].mapFeatures[yTop][xLeft].actionable) ||
         (places[currentPlace].mapFeatures[yBottom][xRight].actionable) || 
@@ -627,10 +628,10 @@ bool checkForActionable(void){
 
 bool checkForExit(void){
   
-  int xLeft =  getSafeIndex(player.boundary.x, places[currentPlace].numbers.xTiles);
-  int xRight =  getSafeIndex(player.boundary.x + TILE, places[currentPlace].numbers.xTiles);
-  int yTop = getSafeIndex(player.boundary.y, places[currentPlace].numbers.yTiles);
-  int yBottom = getSafeIndex(player.boundary.y + TILE, places[currentPlace].numbers.yTiles);
+  size_t xLeft =  getSafeIndex(player.boundary.x, places[currentPlace].numbers.xTiles);
+  size_t xRight =  getSafeIndex(player.boundary.x + TILE, places[currentPlace].numbers.xTiles);
+  size_t yTop = getSafeIndex(player.boundary.y, places[currentPlace].numbers.yTiles);
+  size_t yBottom = getSafeIndex(player.boundary.y + TILE, places[currentPlace].numbers.yTiles);
   
   return((places[currentPlace].mapFeatures[yTop][xLeft].exit) ||
         (places[currentPlace].mapFeatures[yBottom][xRight].exit) || 
